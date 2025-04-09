@@ -30,4 +30,7 @@ jobs:
         run: |
           aws s3 sync . s3://cloud-resume-342811584933-us-east-1
 
+      - name: invalidate cloudfront cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id E1VT0NBYZVXJS2 --paths "/*"
 
