@@ -26,9 +26,12 @@ jobs:
           role-session-name: ghactions
           aws-region: us-east-1
 
+      - name: build
+        run: pnpm build
+
       - name: deploy to s3
         run: |
-          aws s3 sync . s3://cloud-resume-342811584933-us-east-1
+          aws s3 sync dist/ s3://cloud-resume-342811584933-us-east-1 --delete
 
       - name: invalidate cloudfront cache
         run: |
