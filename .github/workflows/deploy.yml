@@ -26,6 +26,18 @@ jobs:
           role-session-name: ghactions
           aws-region: us-east-1
 
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: install pnpm
+        run: npm install -g pnpm
+
+      - name: instal deps 
+        run: pnpm install
+
       - name: build
         run: pnpm build
 
