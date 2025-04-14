@@ -1,36 +1,33 @@
 async function enableMocking() {
-  if (import.meta.env.DEV) {
-    const { worker } = await import("./mocks/browser");
+    if (import.meta.env.DEV) {
+        const { worker } = await import("./mocks/browser");
 
-    return worker.start();
-  } else {
-    return;
-  }
+        return worker.start();
+    } else {
+        return;
+    }
 }
 
 enableMocking().then(async () => {
-  const endpoint =
-    "https://rdt07jwj7j.execute-api.us-east-1.amazonaws.com/prod/";
+    const endpoint =
+        "https://rdt07jwj7j.execute-api.us-east-1.amazonaws.com/prod/";
 
-  async function getVisitorCount() {
-    try {
-      const response = await fetch(endpoint);
-      const data = await response.json();
+    await fetch(endpoint)
+        .then(async (response) => {
+            const data = await response.json();
+            const countEl = document.getElementById("count");
+            console.info(`total visitors: ${data.count}`);
 
-      return data;
-    } catch (e) {
-      console.error(e);
+            if (countEl) {
+                countEl.innerText = data.count;
 
-      return null;
-    }
-  }
-
-  const visitorCount = await getVisitorCount();
-
-  if (!visitorCount) {
-    console.log("Visitor count unavailable");
-  } else {
-    const { count } = visitorCount;
-    console.info(`total visitors: ${count}`);
-  }
+                const containerEl = countEl.parentElement;
+                containerEl?.classList.add("opacity-100");
+                containerEl?.classList.remove("opacity-0");
+            }
+        })
+        .catch((e) => {
+            console.log("Visitor count unavailable");
+            console.log(e);
+        });
 });
